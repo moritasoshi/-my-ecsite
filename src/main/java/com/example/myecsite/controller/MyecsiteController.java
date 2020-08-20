@@ -42,6 +42,18 @@ public class MyecsiteController {
     }
 
     /////////////////////////
+    //// 商品詳細画面
+    /////////////////////////
+    @RequestMapping("/showDetails")
+    public String showDetails(Integer id, Model model) {
+        Item item = itemService.showDetails(id);
+        model.addAttribute("item", item);
+        return "item_detail";
+    }
+
+
+
+    /////////////////////////
     //// ログイン
     /////////////////////////
     @RequestMapping("/toLogin")
@@ -56,6 +68,7 @@ public class MyecsiteController {
     public String toRegister() {
         return "register_user";
     }
+
     @RequestMapping("/register")
     public String register(@Validated RegisterUserForm form, BindingResult result, Model model) {
         //// バリデーションチェック

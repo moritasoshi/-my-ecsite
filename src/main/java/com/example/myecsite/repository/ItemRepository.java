@@ -1,9 +1,12 @@
 package com.example.myecsite.repository;
 
 import com.example.myecsite.domain.Item;
+import com.example.myecsite.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,12 +30,26 @@ public class ItemRepository {
     };
 
     /**
-     *
      * @return [フラグ]deleted=falseの商品一覧を返す
      */
     public List<Item> findAll() {
         String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE deleted = false ORDER BY price_m";
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
         return itemList;
+    }
+
+    /**
+     * 任意の商品情報を返す
+     * @param id
+     * @return 任意の1件の商品情報を返す
+     */
+    public Item load(Integer id) {
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE deleted = false AND id = :id";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+        List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
+        if(itemList.isEmpty()){
+            return null;
+        }
+        return itemList.get(0);
     }
 }
