@@ -31,21 +31,13 @@ public class Item {
 	/** 削除フラグ */
 	private Boolean deleted;
 
+	private List<Topping> toppingList;
+
+
+
 	// constructor
 	public Item() {
 
-	}
-
-	public Item(Integer id, String name, String description, Integer priceM, Integer priceL, String imagePath,
-			boolean deleted) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.priceM = priceM;
-		this.priceL = priceL;
-		this.imagePath = imagePath;
-		this.deleted = deleted;
 	}
 
 	// getter setter
@@ -103,6 +95,14 @@ public class Item {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public List<Topping> getToppingList() {
+		return toppingList;
+	}
+
+	public void setToppingList(List<Topping> toppingList) {
+		this.toppingList = toppingList;
 	}
 
 }
