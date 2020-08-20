@@ -51,7 +51,7 @@
                         <tr>
                     </th:block>
                     <th>
-                        <a th:href="@{/showDetail}">
+                        <a th:href="@{/showDetails(id=${item.id})}">
                             <img th:src="@{'/img_curry/' + ${item.imagePath}}"
                                  class="img-responsive img-rounded item-img-center">
                         </a><br>
