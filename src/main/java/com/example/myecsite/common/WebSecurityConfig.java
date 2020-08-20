@@ -40,12 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and()
-//		.logout()
-//			.logoutUrl("/logout").permitAll()
-//			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//			.logoutSuccessUrl("/")
-//			.deleteCookies("JSESSIONID")
-//			.invalidateHttpSession(true).permitAll()
+                .logout()
+                .logoutUrl("/logout").permitAll()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true).permitAll()
         ;
     }
 
