@@ -1,7 +1,10 @@
 package com.example.myecsite.service;
 
 import com.example.myecsite.domain.Item;
+import com.example.myecsite.domain.ItemPage;
+import com.example.myecsite.domain.SearchItem;
 import com.example.myecsite.domain.Topping;
+import com.example.myecsite.form.SearchItemForm;
 import com.example.myecsite.repository.ItemRepository;
 import com.example.myecsite.repository.ToppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class ItemService {
     @Autowired
     private ToppingRepository toppingRepository;
 
+    private static final int PAGE_SIZE = 5;
+
+
     public List<Item> showAllItems(){
         return itemRepository.findAll();
     }
@@ -28,5 +34,14 @@ public class ItemService {
         List<Topping> toppingList = toppingRepository.findAll();
         item.setToppingList(toppingList);
         return item;
+    }
+
+    public List<Item> searchItems(SearchItemForm form){
+        return itemRepository.findByName(form.getName());
+    }
+
+    public ItemPage searchItems(SearchItem searchItem){
+        searchItem.setPageSize(PAGE_SIZE);
+        return itemRepository.findBySearchTerms(searchItem);
     }
 }

@@ -36,9 +36,8 @@ public class Item {
 
 
 	// constructor
-	public Item() {
+	public Item() {	}
 
-	}
 
 	// getter setter
 	public Integer getId() {

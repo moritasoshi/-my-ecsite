@@ -1,8 +1,12 @@
 package com.example.myecsite.controller;
 
 import com.example.myecsite.domain.Item;
+import com.example.myecsite.domain.ItemPage;
+import com.example.myecsite.domain.SearchItem;
 import com.example.myecsite.domain.User;
+import com.example.myecsite.enums.SortEnum;
 import com.example.myecsite.form.RegisterUserForm;
+import com.example.myecsite.form.SearchItemForm;
 import com.example.myecsite.service.ItemService;
 import com.example.myecsite.service.RegisterService;
 import org.springframework.beans.BeanUtils;
@@ -15,31 +19,65 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.constraints.NotNull;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 public class MyecsiteController {
     @Autowired
     private RegisterService registerService;
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private HttpSession session;
 
     @ModelAttribute
     public RegisterUserForm setUpRegisterUserForm() {
         return new RegisterUserForm();
     }
 
+    @ModelAttribute
+    public SearchItemForm setUpSearchForm() {
+        return new SearchItemForm();
+    }
+
     /////////////////////////
     //// 商品一覧画面
     /////////////////////////
     @RequestMapping("")
-    public String init(Model model) {
-        List<Item> itemList = itemService.showAllItems();
-        model.addAttribute("itemList", itemList);
+    public String index(Model model, SearchItemForm form) {
+        // 不正な値のチェック
+        Integer page = form.getPage();
+        Integer totalPage = (Integer) session.getAttribute("totalPage");
+        if (isNull(page) || page <= 0 || isNull(totalPage)) {
+            page = 1;
+        } else if (page > totalPage) {
+            page = totalPage;
+        }
+
+        // 検索条件
+        SearchItem searchItem = new SearchItem();
+        searchItem.setName(form.getName());
+        searchItem.setPage(page);
+        searchItem.setSortEnum(SortEnum.getById(form.getSortId()));
+        ItemPage itemPage = itemService.searchItems(searchItem);
+
+		model.addAttribute("searchItemForm", form);
+		model.addAttribute("itemList", itemPage.getItemList());
+		model.addAttribute("size", itemPage.getSize());
+		model.addAttribute("page", itemPage.getPage());
+		model.addAttribute("totalPage", itemPage.getTotalPage()); // 表示用
+		session.setAttribute("totalPage", itemPage.getTotalPage()); // サーバー用
+
         return "item_list_curry";
     }
+
+
+
+    // 検索条件の設定
 
     /////////////////////////
     //// 商品詳細画面
