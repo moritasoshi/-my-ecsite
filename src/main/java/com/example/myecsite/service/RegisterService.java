@@ -1,7 +1,7 @@
 package com.example.myecsite.service;
 
 import com.example.myecsite.domain.User;
-import com.example.myecsite.repository.UserRepository;
+import com.example.myecsite.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,18 +13,18 @@ import java.util.Objects;
 @Transactional
 public class RegisterService {
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void registerUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userMapper.save(user);
     }
 
     public boolean isRegistered(String email){
-        if(Objects.nonNull(userRepository.findByEmail(email))){
+        if(Objects.nonNull(userMapper.findByEmail(email))){
             return true;
         } else{
             return false;

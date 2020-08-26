@@ -2,7 +2,7 @@ package com.example.myecsite.service;
 
 import com.example.myecsite.domain.LoginUser;
 import com.example.myecsite.domain.User;
-import com.example.myecsite.repository.UserRepository;
+import com.example.myecsite.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,14 +16,12 @@ import java.util.Collection;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-
+        User user = userMapper.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("そのEmailは登録されていません。");
         }
