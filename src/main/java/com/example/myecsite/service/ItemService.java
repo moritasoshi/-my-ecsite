@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 商品情報の一覧表示および詳細表示に関連するクラス
@@ -22,7 +23,7 @@ public class ItemService {
     @Autowired
     private ToppingRepository toppingRepository;
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 9;
 
 
     public List<Item> showAllItems(){
@@ -43,5 +44,9 @@ public class ItemService {
     public ItemPage searchItems(SearchItem searchItem){
         searchItem.setPageSize(PAGE_SIZE);
         return itemRepository.findBySearchTerms(searchItem);
+    }
+
+    public List<String> searchItemNames(String name){
+        return itemRepository.findByName(name).stream().map(item -> item.getName()).collect(Collectors.toList());
     }
 }
