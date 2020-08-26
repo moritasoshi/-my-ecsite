@@ -5,8 +5,6 @@ import java.util.List;
 /**
  * アイテム情報を表すドメイン.
  * 
- * @author yumi takahashi
- *
  */
 public class Item {
 
@@ -33,13 +31,22 @@ public class Item {
 
 	private List<Topping> toppingList;
 
-
-
-	// constructor
 	public Item() {	}
 
+	@Override
+	public String toString() {
+		return "Item{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", priceM=" + priceM +
+				", priceL=" + priceL +
+				", imagePath='" + imagePath + '\'' +
+				", deleted=" + deleted +
+				", toppingList=" + toppingList +
+				'}';
+	}
 
-	// getter setter
 	public Integer getId() {
 		return id;
 	}
