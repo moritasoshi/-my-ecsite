@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myecsite.mapper.OrderItemMapper">
+    <!--  自動採番取得のためselectステートメントを使用  -->
+    <select id="save" resultType="int">
+        INSERT INTO
+        order_items
+        (
+        item_id, order_id, quantity, size
+        )
+        VALUES
+        (
+        #{itemId}, #{orderId}, #{quantity}, #{size}
+        )
+        RETURNING id
+    </select>
+
+</mapper>
