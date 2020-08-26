@@ -6,8 +6,6 @@ import java.util.List;
 
 /**
  * 注文情報を表すドメイン.
- *
- * @author yumi takahashi
  */
 public class Order {
 
@@ -71,22 +69,21 @@ public class Order {
      */
     private Integer paymentMethod;
 
-    public Order() {
+    private User user;
+    private List<OrderItem> orderItemList;
+
+    public Integer getTax() {
+        return (int) (totalPrice * 0.1);
     }
 
-    public Order(Integer id, Integer userId, Integer status, Integer totalPrice, Date orderDate, String destinationName, String destinationEmail, String destinationZipcode, String destinationAddress, String destinationTel, Timestamp deliveryTime, Integer paymentMethod) {
-        this.id = id;
-        this.userId = userId;
-        this.status = status;
-        this.totalPrice = totalPrice;
-        this.orderDate = orderDate;
-        this.destinationName = destinationName;
-        this.destinationEmail = destinationEmail;
-        this.destinationZipcode = destinationZipcode;
-        this.destinationAddress = destinationAddress;
-        this.destinationTel = destinationTel;
-        this.deliveryTime = deliveryTime;
-        this.paymentMethod = paymentMethod;
+    public Integer getCalcTotalPrice() {
+        Integer totalPrice = 0;
+
+        for (OrderItem orderItem : orderItemList) {
+            totalPrice += orderItem.getSubTotal();
+        }
+
+        return totalPrice;
     }
 
     public Integer getId() {
@@ -183,5 +180,21 @@ public class Order {
 
     public void setPaymentMethod(Integer paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }

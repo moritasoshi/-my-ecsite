@@ -6,36 +6,12 @@ package com.example.myecsite.domain;
  * @author yumi takahashi
  */
 public class OrderTopping {
-
-    /**
-     * ID
-     */
     private Integer id;
-
-    /**
-     * トッピングID
-     */
     private Integer toppingId;
-
-    /**
-     * 注文商品ID
-     */
     private Integer orderItemId;
 
+    private Topping topping;
 
-    // constructor
-    public OrderTopping() {
-
-    }
-
-    public OrderTopping(Integer id, Integer toppingId, Integer orderItemId) {
-        super();
-        this.id = id;
-        this.toppingId = toppingId;
-        this.orderItemId = orderItemId;
-    }
-
-    // getter setter
     public Integer getId() {
         return id;
     }
@@ -60,4 +36,11 @@ public class OrderTopping {
         this.orderItemId = orderItemId;
     }
 
+    public Topping getTopping() {
+        return topping;
+    }
+
+    public void setTopping(Topping topping) {
+        this.topping = topping;
+    }
 }

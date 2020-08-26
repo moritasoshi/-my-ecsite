@@ -5,45 +5,43 @@ import java.util.Objects;
 
 /**
  * 注文商品を表すドメイン.
- *
- * @author yumi takahashi
  */
 public class OrderItem {
 
-    /**
-     * ID
-     */
     private Integer id;
-
-    /**
-     * 商品ID
-     */
     private Integer itemId;
-
-    /**
-     * オーダーID
-     */
     private Integer orderId;
-
-    /**
-     * 数量
-     */
     private Integer quantity;
+    private String size;
+    private Item item;
+    private List<OrderTopping> orderToppingList;
 
     /**
-     * サイズ
+     * 注文商品の小計金額を返すメソッド
+     * @return (itemPrice + toppingPrice) * quantity
      */
-    private Character size;
+    public Integer getSubTotal() {
+        // subTotal = (itemPrice + toppingPrice) * quantity
+        Integer itemPrice = 0;
+        Integer toppingPrice = 0;
 
-    public OrderItem() {
-    }
+        // itemPrice
+        if ("M".equals(size)) {
+            itemPrice = item.getPriceM();
+        } else if ("L".equals(size)) {
+            itemPrice = item.getPriceL();
+        }
 
-    public OrderItem(Integer id, Integer itemId, Integer orderId, Integer quantity, Character size) {
-        this.id = id;
-        this.itemId = itemId;
-        this.orderId = orderId;
-        this.quantity = quantity;
-        this.size = size;
+        // toppingPrice
+        for (OrderTopping orderTopping : orderToppingList) {
+            if (("M").equals(size)) {
+                toppingPrice += orderTopping.getTopping().getPriceM();
+            } else if (("L").equals(size)) {
+                toppingPrice += orderTopping.getTopping().getPriceL();
+            }
+        }
+
+        return (itemPrice + toppingPrice) * quantity;
     }
 
     public Integer getId() {
@@ -78,11 +76,27 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Character getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Character size) {
+    public void setSize(String size) {
         this.size = size;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public List<OrderTopping> getOrderToppingList() {
+        return orderToppingList;
+    }
+
+    public void setOrderToppingList(List<OrderTopping> orderToppingList) {
+        this.orderToppingList = orderToppingList;
     }
 }
