@@ -1,16 +1,16 @@
 package com.example.myecsite.controller;
 
-import com.example.myecsite.domain.Item;
-import com.example.myecsite.domain.ItemPage;
-import com.example.myecsite.domain.SearchItem;
-import com.example.myecsite.domain.User;
+import com.example.myecsite.domain.*;
 import com.example.myecsite.enums.SortEnum;
+import com.example.myecsite.form.ItemForm;
 import com.example.myecsite.form.RegisterUserForm;
 import com.example.myecsite.form.SearchItemForm;
+import com.example.myecsite.service.CartService;
 import com.example.myecsite.service.ItemService;
 import com.example.myecsite.service.RegisterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
@@ -33,6 +34,8 @@ public class MyecsiteController {
     private ItemService itemService;
     @Autowired
     private HttpSession session;
+    @Autowired
+    private CartService cartService;
 
     @ModelAttribute
     public RegisterUserForm setUpRegisterUserForm() {
@@ -40,8 +43,13 @@ public class MyecsiteController {
     }
 
     @ModelAttribute
-    public SearchItemForm setUpSearchForm() {
+    public SearchItemForm setUpSearchItemForm() {
         return new SearchItemForm();
+    }
+
+    @ModelAttribute
+    public ItemForm setUpItemForm() {
+        return new ItemForm();
     }
 
     /////////////////////////
@@ -65,19 +73,12 @@ public class MyecsiteController {
         searchItem.setSortEnum(SortEnum.getById(form.getSortId()));
         ItemPage itemPage = itemService.searchItems(searchItem);
 
-		model.addAttribute("searchItemForm", form);
-		model.addAttribute("itemList", itemPage.getItemList());
-		model.addAttribute("size", itemPage.getSize());
-		model.addAttribute("page", itemPage.getPage());
-		model.addAttribute("totalPage", itemPage.getTotalPage()); // 表示用
-		session.setAttribute("totalPage", itemPage.getTotalPage()); // サーバー用
+        model.addAttribute("searchItemForm", form);
+        model.addAttribute("itemList", itemPage.getItemList());
+        session.setAttribute("totalPage", itemPage.getTotalPage()); // サーバー用
 
         return "item_list_curry";
     }
-
-
-
-    // 検索条件の設定
 
     /////////////////////////
     //// 商品詳細画面
@@ -89,6 +90,31 @@ public class MyecsiteController {
         return "item_detail";
     }
 
+    /////////////////////////
+    //// ショッピングカート
+    /////////////////////////
+    @RequestMapping("/addToCart")
+    public String addToCart(@AuthenticationPrincipal LoginUser loginUser, ItemForm form, Model model) {
+        if (Objects.isNull(loginUser)) {
+            return "redirect:/toLogin";
+        }
+        // カートへの追加操作
+        Integer userId = loginUser.getUser().getId();
+        OrderItem orderItem = new OrderItem();
+        BeanUtils.copyProperties(form, orderItem);
+        List<Integer> toppingIdList = form.getToppingIdList();
+        cartService.addToCart(userId, orderItem, toppingIdList);
+
+        // 追加が完了すればカート一覧画面へ遷移
+        return "redirect:/displayCart";
+    }
+
+    @RequestMapping("/displayCart")
+    public String displayCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+        Order order = cartService.showOrder(6, 0);
+        model.addAttribute("orderItemList", order.getOrderItemList());
+        return "cart_list";
+    }
 
 
     /////////////////////////
