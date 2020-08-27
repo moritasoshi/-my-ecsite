@@ -44,8 +44,8 @@
 						<span>ゲストさん&nbsp;ようこそ&nbsp;&nbsp;</span>
                     </span>
                     <a th:href="@{/}" class="navbar-link">商品一覧</a>&nbsp;&nbsp;
-                    <a th:href="@{/showCartList}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
-                    <a th:href="@{/showOrderHistory}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
+                    <a th:href="@{/toShoppingCart}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
+                    <a th:href="@{/toOrderHistory}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
                     <span sec:authorize="isAnonymous()">
                         <a th:href="@{/toLogin}" class="btn btn-warning" role="button">ログイン</a>&nbsp;&nbsp;
                     </span>
