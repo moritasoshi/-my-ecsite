@@ -16,5 +16,11 @@
         )
         RETURNING id
     </select>
-
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM
+        order_items
+        WHERE
+        id = #{orderItemId}
+    </delete>
 </mapper>

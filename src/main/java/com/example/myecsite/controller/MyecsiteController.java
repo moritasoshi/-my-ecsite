@@ -111,10 +111,17 @@ public class MyecsiteController {
 
     @RequestMapping("/toShoppingCart")
     public String toShoppingCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
-        Order order = cartService.showOrder(6, 0);
+        Order order = cartService.showOrder(loginUser.getUser().getId(), 0);
         model.addAttribute("orderItemList", order.getOrderItemList());
         return "cart_list";
     }
+
+    @RequestMapping("/deleteFromCart")
+    public String deleteFromCart(Integer orderItemId){
+        cartService.deleteOrderItemFromCart(orderItemId);
+        return "redirect:/toShoppingCart";
+    }
+
 
 
     /////////////////////////

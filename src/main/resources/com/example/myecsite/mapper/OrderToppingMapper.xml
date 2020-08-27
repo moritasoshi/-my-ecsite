@@ -14,7 +14,11 @@
         #{toppingId}, #{orderItemId}
         )
     </insert>
-    <select id="load" resultType="com.example.myecsite.domain.OrderTopping">
-        SELECT * FROM order_toppings WHERE id = #{id}
-    </select>
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM
+        order_toppings
+        WHERE
+        order_item_id = #{orderItemId}
+    </delete>
 </mapper>

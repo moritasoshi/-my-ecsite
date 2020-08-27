@@ -72,4 +72,16 @@ public class CartService {
         return orderMapper.findByUserIdAndStatus(userId, status);
     }
 
+    /**
+     * 指定の注文商品をカートから削除する
+     *
+     * @param orderItemId
+     */
+    public void deleteOrderItemFromCart(Integer orderItemId) {
+        // orderItemの削除
+        orderItemMapper.delete(orderItemId);
+        // orderToppingの削除
+        orderToppingMapper.delete(orderItemId);
+    }
+
 }

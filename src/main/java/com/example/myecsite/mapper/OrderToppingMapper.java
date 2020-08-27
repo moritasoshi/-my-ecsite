@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OrderToppingMapper {
     Integer save(OrderTopping orderTopping);
+    Integer delete(Integer orderItemId);
 }
