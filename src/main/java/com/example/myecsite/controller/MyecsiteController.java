@@ -3,6 +3,7 @@ package com.example.myecsite.controller;
 import com.example.myecsite.domain.*;
 import com.example.myecsite.enums.SortEnum;
 import com.example.myecsite.form.ItemForm;
+import com.example.myecsite.form.OrderForm;
 import com.example.myecsite.form.RegisterUserForm;
 import com.example.myecsite.form.SearchItemForm;
 import com.example.myecsite.service.CartService;
@@ -51,6 +52,12 @@ public class MyecsiteController {
     public ItemForm setUpItemForm() {
         return new ItemForm();
     }
+
+    @ModelAttribute
+    public OrderForm setUpOrderForm() {
+        return new OrderForm();
+    }
+
 
     /////////////////////////
     //// 商品一覧画面
@@ -106,22 +113,40 @@ public class MyecsiteController {
         cartService.addToCart(userId, orderItem, toppingIdList);
 
         // 追加が完了すればカート一覧画面へ遷移
-        return "redirect:/toShoppingCart";
+        return "redirect:/shoppingCart";
     }
 
-    @RequestMapping("/toShoppingCart")
-    public String toShoppingCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
-        Order order = cartService.showOrder(loginUser.getUser().getId(), 0);
-        model.addAttribute("orderItemList", order.getOrderItemList());
+    @RequestMapping("/shoppingCart")
+    public String shoppingCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+        Order cart = cartService.showCart(loginUser.getUser().getId());
+        model.addAttribute("orderItemList", cart.getOrderItemList());
         return "cart_list";
     }
 
     @RequestMapping("/deleteFromCart")
-    public String deleteFromCart(Integer orderItemId){
+    public String deleteFromCart(Integer orderItemId) {
         cartService.deleteOrderItemFromCart(orderItemId);
-        return "redirect:/toShoppingCart";
+        return "redirect:/shoppingCart";
     }
 
+    /////////////////////////
+    //// 商品の購入
+    /////////////////////////
+
+    @RequestMapping("/orderConfirm")
+    public String orderConfirm(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+        Order cart = cartService.showCart(loginUser.getUser().getId());
+        model.addAttribute("orderItemList", cart.getOrderItemList());
+        return "order_confirm";
+    }
+
+    @RequestMapping("/order")
+    public String order(@Validated OrderForm orderForm, BindingResult result) {
+        if (result.hasErrors()) {
+            return "order_confirm";
+        }
+        return "order_finished";
+    }
 
 
     /////////////////////////
