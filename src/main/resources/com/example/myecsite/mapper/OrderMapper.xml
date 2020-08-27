@@ -44,6 +44,7 @@
         items.image_path AS item_image_path,
 
         ordtop.id AS order_topping_id,
+        ordtop.order_item_id AS ordtop_order_item_id,
         toppings.id AS topping_id,
 
         toppings.name AS topping_name,
@@ -101,7 +102,7 @@
             <collection property="orderToppingList" ofType="com.example.myecsite.domain.OrderTopping">
                 <id property="id" column="order_topping_id"/>
                 <result property="toppingId" column="topping_id"/>
-                <result property="orderItemId" column="order_item_id"/>
+                <result property="orderItemId" column="ordtop_order_item_id"/>
                 <association property="topping" javaType="com.example.myecsite.domain.Topping">
                     <id property="id" column="topping_id"/>
                     <result property="name" column="topping_name"/>
