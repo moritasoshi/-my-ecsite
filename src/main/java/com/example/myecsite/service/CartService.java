@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * ショッピングカートの表示・追加削除に関連するサービス
+ */
 @Service
 @Transactional
 public class CartService {
@@ -35,7 +38,7 @@ public class CartService {
      * @param toppingIdList
      */
     public void addToCart(Integer userId, OrderItem orderItem, List<Integer> toppingIdList) {
-        Order existingCart = showOrder(userId, 0);
+        Order existingCart = showCart(userId);
         if (Objects.nonNull(existingCart)) {        // 既存のカートがある場合
             Integer orderId = existingCart.getId();
             // orderItem
@@ -68,8 +71,13 @@ public class CartService {
         }
     }
 
-    public Order showOrder(Integer userId, Integer status) {
-        return orderMapper.findByUserIdAndStatus(userId, status);
+    /**
+     * 任意のユーザーのショッピングカートを検索する
+     * @param userId
+     * @return Nullable Order object
+     */
+    public Order showCart(Integer userId) {
+        return orderMapper.findByUserIdAndStatus(userId, 0);
     }
 
     /**

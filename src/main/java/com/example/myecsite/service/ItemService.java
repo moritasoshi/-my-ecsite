@@ -9,14 +9,16 @@ import com.example.myecsite.repository.ItemRepository;
 import com.example.myecsite.repository.ToppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 商品情報の一覧表示および詳細表示に関連するクラス
+ * 商品情報の一覧表示および詳細表示に関連するサービス
  */
 @Service
+@Transactional
 public class ItemService {
     @Autowired
     private ItemRepository itemRepository;

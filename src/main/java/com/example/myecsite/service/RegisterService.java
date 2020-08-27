@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+/**
+ * ユーザー情報の登録に関連するサービス
+ */
 @Service
 @Transactional
 public class RegisterService {
