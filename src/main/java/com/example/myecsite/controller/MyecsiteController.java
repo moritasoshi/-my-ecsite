@@ -106,11 +106,11 @@ public class MyecsiteController {
         cartService.addToCart(userId, orderItem, toppingIdList);
 
         // 追加が完了すればカート一覧画面へ遷移
-        return "redirect:/displayCart";
+        return "redirect:/toShoppingCart";
     }
 
-    @RequestMapping("/displayCart")
-    public String displayCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+    @RequestMapping("/toShoppingCart")
+    public String toShoppingCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
         Order order = cartService.showOrder(6, 0);
         model.addAttribute("orderItemList", order.getOrderItemList());
         return "cart_list";
