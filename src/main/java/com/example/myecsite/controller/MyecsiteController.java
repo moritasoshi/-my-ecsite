@@ -108,7 +108,10 @@ public class MyecsiteController {
     //// ショッピングカート
     /////////////////////////
     @RequestMapping("/addToCart")
-    public String addToCart(@AuthenticationPrincipal LoginUser loginUser, ItemForm form, Model model) {
+    public String addToCart(@AuthenticationPrincipal LoginUser loginUser, @Validated ItemForm form, BindingResult result, Model model) {
+        if(result.hasErrors()){
+            return showDetails(form.getItemId(), model);
+        }
         // カートへの追加操作
         Integer userId = loginUser.getUser().getId();
         OrderItem orderItem = new OrderItem();
