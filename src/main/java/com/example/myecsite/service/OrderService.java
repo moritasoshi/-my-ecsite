@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 商品の購入や購入履歴に関連するサービス
  */
@@ -24,4 +26,14 @@ public class OrderService {
         return orderMapper.update(order);
     }
 
+    /**
+     * 注文履歴を検索する.
+     *
+     * @param userId ユーザID
+     * @return 注文履歴
+     *
+     */
+    public List<Order> findOrderHistory(Integer userId) {
+        return orderMapper.findNonStatus0ByUserId(userId);
+    }
 }

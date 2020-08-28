@@ -165,7 +165,6 @@ public class MyecsiteController {
         try {
             Timestamp timestamp = new Timestamp(sdFormat.parse(strDeliveryTime).getTime());
             order.setDeliveryTime(timestamp);
-            System.out.println("timestampオブジェクト:" + timestamp);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -173,17 +172,24 @@ public class MyecsiteController {
         return "order_finished";
     }
 
-    @RequestMapping("/timestamp")
-    public void timestamp() {
-        String strDeliveryTime = "2020/08/08 15:00:00";
-        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-        try {
-            Date date = sdFormat.parse(strDeliveryTime);
-            Timestamp timestamp = new Timestamp(date.getTime());
-            System.out.println("timestampオブジェクト:" + timestamp);
-        } catch (ParseException e) {
-
-        }
+    //////////////////////////////////////////////
+    //// 注文履歴の表示
+    //////////////////////////////////////////////
+    /**
+     * 注文履歴画面の表示
+     *
+     * @param loginUser 認証済みユーザー
+     * @param model     モデル
+     */
+    @RequestMapping("/toOrderHistory")
+    public String toOrderHistory(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+        // user情報を取得
+        Integer userId = loginUser.getUser().getId();
+        // user情報をもとに注文履歴をDBから検索
+        List<Order> orderedList = orderService.findOrderHistory(userId);
+        // List<>をスコープに詰める
+        model.addAttribute("orderList", orderedList);
+        return "order_history";
     }
 
 

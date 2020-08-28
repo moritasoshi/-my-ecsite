@@ -130,6 +130,102 @@
             </collection>
         </collection>
     </resultMap>
+<select id="findNonStatus0ByUserId" resultMap="findNonStatus0ByUserIdResult">
+        SELECT
+        ord.id AS id,
+        ord.user_id AS user_id,
+        ord.status AS status,
+        ord.total_price AS total_price,
+        ord.order_date AS order_date,
+        ord.destination_name AS destination_name,
+        ord.destination_email AS destination_email,
+        ord.destination_zipcode AS destination_zipcode,
+        ord.destination_address AS destination_address,
+        ord.destination_tel AS destination_tel,
+        ord.delivery_time AS delivery_time,
+        ord.payment_method AS payment_method,
+
+        orditem.id AS order_item_id,
+        items.id AS item_id,
+        ord.id AS order_id,
+        orditem.quantity AS quantity,
+        orditem.size AS size,
+
+        items.name AS item_name,
+        items.description AS item_description,
+        items.price_m AS item_price_m,
+        items.price_l AS item_price_l,
+        items.image_path AS item_image_path,
+
+        ordtop.id AS order_topping_id,
+        ordtop.order_item_id AS ordtop_order_item_id,
+        toppings.id AS topping_id,
+
+        toppings.name AS topping_name,
+        toppings.price_m AS topping_price_m,
+        toppings.price_l AS topping_price_l
+
+        FROM
+        orders AS ord
+        LEFT OUTER JOIN
+        order_items AS orditem
+        ON  ord.id = orditem.order_id
+        LEFT OUTER JOIN
+        order_toppings AS ordtop
+        ON  orditem.id = ordtop.order_item_id
+        LEFT OUTER JOIN
+        items
+        ON  items.id = orditem.item_id
+        LEFT OUTER JOIN
+        toppings
+        ON  toppings.id = ordtop.topping_id
+        WHERE
+        ord.user_id = #{userId}
+        AND ord.status != 0
+        ORDER BY
+        orditem.id DESC,
+        ordtop.id
+    </select>
+    <resultMap id="findNonStatus0ByUserIdResult" type="com.example.myecsite.domain.Order">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id"/>
+        <result property="status" column="status"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="orderDate" column="order_date"/>
+        <result property="destinationName" column="destination_name"/>
+        <result property="destinationEmail" column="destination_email"/>
+        <result property="destinationZipcode" column="destination_zipcode"/>
+        <result property="destinationAddress" column="destination_address"/>
+        <result property="destinationTel" column="destination_tel"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <collection property="orderItemList" ofType="com.example.myecsite.domain.OrderItem">
+            <id property="id" column="order_item_id"/>
+            <result property="itemId" column="item_id"/>
+            <result property="orderId" column="order_id"/>
+            <result property="quantity" column="quantity"/>
+            <result property="size" column="size"/>
+            <association property="item" javaType="com.example.myecsite.domain.Item">
+                <id property="id" column="item_id"/>
+                <result property="name" column="item_name"/>
+                <result property="description" column="item_description"/>
+                <result property="priceM" column="item_price_m"/>
+                <result property="priceL" column="item_price_l"/>
+                <result property="imagePath" column="item_image_path"/>
+            </association>
+            <collection property="orderToppingList" ofType="com.example.myecsite.domain.OrderTopping">
+                <id property="id" column="order_topping_id"/>
+                <result property="toppingId" column="topping_id"/>
+                <result property="orderItemId" column="ordtop_order_item_id"/>
+                <association property="topping" javaType="com.example.myecsite.domain.Topping">
+                    <id property="id" column="topping_id"/>
+                    <result property="name" column="topping_name"/>
+                    <result property="priceM" column="topping_price_m"/>
+                    <result property="priceL" column="topping_price_l"/>
+                </association>
+            </collection>
+        </collection>
+    </resultMap>
 
 
 </mapper>
