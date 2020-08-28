@@ -75,15 +75,15 @@ public class MyecsiteController {
         Integer page = form.getPage();
         Integer totalPage = (Integer) session.getAttribute("totalPage");
         if (isNull(page) || page <= 0 || isNull(totalPage)) {
-            page = 1;
+            form.setPage(1);
         } else if (page > totalPage) {
-            page = totalPage;
+            form.setPage(totalPage);
         }
 
         // 検索条件
         SearchItem searchItem = new SearchItem();
         searchItem.setName(form.getName());
-        searchItem.setPage(page);
+        searchItem.setPage(form.getPage());
         searchItem.setSortEnum(SortEnum.getById(form.getSortId()));
         ItemPage itemPage = itemService.searchItems(searchItem);
 
