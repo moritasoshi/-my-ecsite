@@ -51,7 +51,7 @@
 
         orditem.id AS order_item_id,
         items.id AS item_id,
-        ord.id AS order_id,
+        orditem.order_id AS order_id,
         orditem.quantity AS quantity,
         orditem.size AS size,
 
