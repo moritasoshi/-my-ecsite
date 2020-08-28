@@ -109,9 +109,6 @@ public class MyecsiteController {
     /////////////////////////
     @RequestMapping("/addToCart")
     public String addToCart(@AuthenticationPrincipal LoginUser loginUser, ItemForm form, Model model) {
-        if (Objects.isNull(loginUser)) {
-            return "redirect:/toLogin";
-        }
         // カートへの追加操作
         Integer userId = loginUser.getUser().getId();
         OrderItem orderItem = new OrderItem();
