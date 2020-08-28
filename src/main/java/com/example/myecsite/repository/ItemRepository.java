@@ -87,7 +87,7 @@ public class ItemRepository {
         List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
         Integer size = template.queryForObject(countSql, param, Integer.class);
 
-        ItemPage itemPage = new ItemPage(itemList, size, page, limit, size / limit + 1);
+        ItemPage itemPage = new ItemPage(itemList, size, page, limit, (int) Math.ceil(size / limit)); // Math.ceilで切り上げ
         return itemPage;
     }
 }
