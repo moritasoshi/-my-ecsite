@@ -87,6 +87,11 @@ public class MyecsiteController {
         searchItem.setSortEnum(SortEnum.getById(form.getSortId()));
         ItemPage itemPage = itemService.searchItems(searchItem);
 
+        // 検索結果が0件の場合は全件表示
+        if(itemPage.getItemList().isEmpty()){
+            itemPage = itemService.searchItems(new SearchItem());
+            model.addAttribute("message", "該当する商品がありません");
+        }
         model.addAttribute("searchItemForm", form);
         model.addAttribute("itemList", itemPage.getItemList());
         session.setAttribute("totalPage", itemPage.getTotalPage()); // サーバー用
