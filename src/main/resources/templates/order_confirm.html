@@ -182,11 +182,13 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <label class="control-label" style="color: red"
-                                                for="inputPeriod">配達日時を入力してください</label>
+                                        <label th:if="${#fields.hasErrors('deliveryDate')}" th:errors="*{deliveryDate}" class="control-label" style="color: red"
+                                                for="deliveryDate">配達日時を入力してください</label>
+                                        <label th:if="${#fields.hasErrors('deliveryTime')}" th:errors="*{deliveryTime}" class="control-label" style="color: red"
+                                               for="deliveryTime">配達日時を入力してください</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="date" name="name" id="name"
+                                        <input type="date" th:field="*{deliveryDate}" id="deliveryDate"
                                                class="form-control input-sm"/>
                                     </div>
 
@@ -195,47 +197,47 @@
                                     <div class="col-sm-12">
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany" checked="checked">
+                                                   th:field="*{deliveryTime}" value="10" checked="checked">
                                             10時
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="11">
                                             11時
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="12">
                                             12時
                                         </label><br>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="13">
                                             13時
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="14">
                                             14時
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="15">
                                             15時
                                         </label><br>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="16">
                                             16時
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="17">
                                             17時
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio"
-                                                   name="responsibleCompany">
+                                                   th:field="*{deliveryTime}" value="18">
                                             18時
                                         </label><br>
                                     </div>

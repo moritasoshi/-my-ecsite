@@ -16,7 +16,24 @@
         )
         RETURNING id
     </select>
-
+    <update id="update" parameterType="com.example.myecsite.domain.Order">
+        UPDATE
+        orders
+        SET
+        status = #{status},
+        total_price = #{total_price},
+        order_date = #{orderDate},
+        destination_name = #{destinationName},
+        destination_email = #{destinationEmail},
+        destination_zipcode = #{destinationZipcode},
+        destination_address = #{destinationAddress},
+        destination_tel = #{destinationTel},
+        delivery_time = #{deliveryTime},
+        payment_method = #{paymentMethod}
+        WHERE
+        user_id = #{userId}
+        AND status = 0
+    </update>
     <select id="findByUserIdAndStatus" resultMap="findByUserIdAndStatusResult">
         SELECT
         ord.id AS id,
@@ -113,6 +130,6 @@
             </collection>
         </collection>
     </resultMap>
-    
+
 
 </mapper>

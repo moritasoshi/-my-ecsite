@@ -15,4 +15,13 @@ public class OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    /**
+     * カートにある商品を注文する
+     * @param order
+     * @return
+     */
+    public Integer Order(Order order) {
+        return orderMapper.update(order);
+    }
+
 }

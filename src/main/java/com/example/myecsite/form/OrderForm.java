@@ -7,11 +7,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class OrderForm {
-    private Integer userId;
 
     private Integer totalPrice;
-    @NotBlank(message = "配達日時を入力してください")
-    private String orderDate;
     @NotBlank(message = "名前を入力してください")
     @Size(max = 50, message = "50文字以内で入力してください")
     private String destinationName;
@@ -23,20 +20,14 @@ public class OrderForm {
     private String destinationZipcode;
     @NotBlank(message = "住所を入力してください")
     private String destinationAddress;
-    @Size(min = 10, max = 11, message = "電話番号を10桁か11桁で入力してください")
+    @Pattern(regexp = "[0-9]{3}-[0-9]{4}-[0-9]{4}", message = "電話番号はXXX-XXXX-XXXXの形式で入力してください")
     private String destinationTel;
-    @NotBlank(message = "配達日時を入力してください")
+    @NotBlank(message = "配達時間を入力してください")
     private String deliveryTime;
+    @NotBlank(message = "配達日を入力してください")
+    private String deliveryDate;
     @NotNull(message = "支払い方法を選択してください")
     private Integer paymentMethod;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public Integer getTotalPrice() {
         return totalPrice;
@@ -44,14 +35,6 @@ public class OrderForm {
 
     public void setTotalPrice(Integer totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
     }
 
     public String getDestinationName() {
@@ -108,5 +91,13 @@ public class OrderForm {
 
     public void setPaymentMethod(Integer paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 }

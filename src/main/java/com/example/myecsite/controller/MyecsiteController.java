@@ -8,6 +8,7 @@ import com.example.myecsite.form.RegisterUserForm;
 import com.example.myecsite.form.SearchItemForm;
 import com.example.myecsite.service.CartService;
 import com.example.myecsite.service.ItemService;
+import com.example.myecsite.service.OrderService;
 import com.example.myecsite.service.RegisterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +42,8 @@ public class MyecsiteController {
     private HttpSession session;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private OrderService orderService;
 
     @ModelAttribute
     public RegisterUserForm setUpRegisterUserForm() {
@@ -141,11 +148,42 @@ public class MyecsiteController {
     }
 
     @RequestMapping("/order")
-    public String order(@Validated OrderForm orderForm, BindingResult result) {
+    public String order(@Validated OrderForm form, BindingResult result, @AuthenticationPrincipal LoginUser loginUser, Model model) {
         if (result.hasErrors()) {
-            return "order_confirm";
+            return orderConfirm(loginUser, model);
         }
+
+        Order order = cartService.showCart(loginUser.getUser().getId());  // id & userId
+        BeanUtils.copyProperties(form, order);  // destinationName,destinationEmail,destinationZipcode,destinationAddress,destinationTel & paymentMethod
+        // status,totalPrice,orderDate,deliveryTime
+        order.setStatus(1);
+        order.setTotalPrice(order.getCalcTotalPrice());
+        order.setOrderDate(new Date());
+
+        String strDeliveryTime = form.getDeliveryDate() + " " + form.getDeliveryTime() + ":00:00";
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        try {
+            Timestamp timestamp = new Timestamp(sdFormat.parse(strDeliveryTime).getTime());
+            order.setDeliveryTime(timestamp);
+            System.out.println("timestampオブジェクト:" + timestamp);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        orderService.Order(order);
         return "order_finished";
+    }
+
+    @RequestMapping("/timestamp")
+    public void timestamp() {
+        String strDeliveryTime = "2020/08/08 15:00:00";
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+        try {
+            Date date = sdFormat.parse(strDeliveryTime);
+            Timestamp timestamp = new Timestamp(date.getTime());
+            System.out.println("timestampオブジェクト:" + timestamp);
+        } catch (ParseException e) {
+
+        }
     }
 
 
