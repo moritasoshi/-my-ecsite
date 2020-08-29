@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -22,11 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userMapper.findByEmail(email);
-        if (user == null) {
+        if (Objects.isNull(user)) {
             throw new UsernameNotFoundException("そのEmailは登録されていません。");
         }
 
-        // 権限付与の例
+        // 権限付与
         Collection<GrantedAuthority> authorityList = new ArrayList<>();
         authorityList.add(new SimpleGrantedAuthority("ROLE_USER")); // ユーザー権限付与
         return new LoginUser(user, authorityList);

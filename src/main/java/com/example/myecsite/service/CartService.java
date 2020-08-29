@@ -39,35 +39,28 @@ public class CartService {
      */
     public void addToCart(Integer userId, OrderItem orderItem, List<Integer> toppingIdList) {
         Order existingCart = showCart(userId);
-        if (Objects.nonNull(existingCart)) {        // 既存のカートがある場合
-            Integer orderId = existingCart.getId();
-            // orderItem
-            orderItem.setOrderId(orderId);
-            Integer orderItemId = orderItemMapper.save(orderItem);
-            // orderToppings
-            for (Integer toppingId : toppingIdList) {
-                OrderTopping orderTopping = new OrderTopping();
-                orderTopping.setOrderItemId(orderItemId);
-                orderTopping.setToppingId(toppingId);
-                orderToppingMapper.save(orderTopping);
-            }
-        } else {                                    // 既存のカートがない場合
+
+        Integer orderId;
+        if (Objects.nonNull(existingCart)) {  // 既存のカートがある場合はorderを更新
+            orderId = existingCart.getId();
+        } else {                              // 既存のカートがない場合はorderを新規作成
             // order
             Order order = new Order();
             order.setUserId(userId);
             order.setStatus(0);
             order.setTotalPrice(0);
-            Integer orderId = orderMapper.save(order);
-            // orderItem
-            orderItem.setOrderId(orderId);
-            Integer orderItemId = orderItemMapper.save(orderItem);
-            // orderToppings
-            for (Integer toppingId : toppingIdList) {
-                OrderTopping orderTopping = new OrderTopping();
-                orderTopping.setOrderItemId(orderItemId);
-                orderTopping.setToppingId(toppingId);
-                orderToppingMapper.save(orderTopping);
-            }
+            orderId = orderMapper.save(order);
+        }
+
+        // orderItem
+        orderItem.setOrderId(orderId);
+        Integer orderItemId = orderItemMapper.save(orderItem);
+        // orderToppings
+        for (Integer toppingId : toppingIdList) {
+            OrderTopping orderTopping = new OrderTopping();
+            orderTopping.setOrderItemId(orderItemId);
+            orderTopping.setToppingId(toppingId);
+            orderToppingMapper.save(orderTopping);
         }
     }
 
