@@ -3,6 +3,7 @@ package com.example.myecsite.repository;
 import com.example.myecsite.domain.Item;
 import com.example.myecsite.domain.ItemPage;
 import com.example.myecsite.domain.SearchItem;
+import com.example.myecsite.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -36,6 +37,16 @@ public class ItemRepository {
     public List<Item> findAll() {
         String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE deleted = false ORDER BY price_m";
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+        return itemList;
+    }
+
+    /**
+     * @return 曖昧検索に一致した商品一覧を返す
+     */
+    public List<Item> findByName(String name) {
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE deleted = false AND name LIKE :name ORDER BY price_m";
+        SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+        List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
         return itemList;
     }
 
