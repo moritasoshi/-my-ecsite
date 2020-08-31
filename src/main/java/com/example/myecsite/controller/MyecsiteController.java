@@ -6,12 +6,10 @@ import com.example.myecsite.form.ItemForm;
 import com.example.myecsite.form.OrderForm;
 import com.example.myecsite.form.RegisterUserForm;
 import com.example.myecsite.form.SearchItemForm;
-import com.example.myecsite.service.CartService;
-import com.example.myecsite.service.ItemService;
-import com.example.myecsite.service.OrderService;
-import com.example.myecsite.service.RegisterService;
+import com.example.myecsite.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +42,8 @@ public class MyecsiteController {
     private CartService cartService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private MailService mailService;
 
     @ModelAttribute
     public RegisterUserForm setUpRegisterUserForm() {
@@ -174,6 +174,10 @@ public class MyecsiteController {
             e.printStackTrace();
         }
         orderService.Order(order);
+
+        // メールの送信
+        mailService.sendMail();
+
         return "order_finished";
     }
 
