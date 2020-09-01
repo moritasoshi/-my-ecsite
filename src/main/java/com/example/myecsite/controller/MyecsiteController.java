@@ -88,7 +88,7 @@ public class MyecsiteController {
         ItemPage itemPage = itemService.searchItems(searchItem);
 
         // 検索結果が0件の場合は全件表示
-        if(itemPage.getItemList().isEmpty()){
+        if (itemPage.getItemList().isEmpty()) {
             itemPage = itemService.searchItems(new SearchItem());
             model.addAttribute("message", "該当する商品がありません");
         }
@@ -114,7 +114,7 @@ public class MyecsiteController {
     /////////////////////////
     @RequestMapping("/addToCart")
     public String addToCart(@AuthenticationPrincipal LoginUser loginUser, @Validated ItemForm form, BindingResult result, Model model) {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return showDetails(form.getItemId(), model);
         }
         // カートへの追加操作
@@ -131,7 +131,11 @@ public class MyecsiteController {
     @RequestMapping("/shoppingCart")
     public String shoppingCart(@AuthenticationPrincipal LoginUser loginUser, Model model) {
         Order cart = cartService.showCart(loginUser.getUser().getId());
-        model.addAttribute("orderItemList", cart.getOrderItemList());
+        if (Objects.isNull(cart)) {
+            model.addAttribute("orderItemList", null);
+        } else {
+            model.addAttribute("orderItemList", cart.getOrderItemList());
+        }
         return "cart_list";
     }
 
@@ -161,7 +165,11 @@ public class MyecsiteController {
         Order order = cartService.showCart(loginUser.getUser().getId());  // id & userId
         BeanUtils.copyProperties(form, order);  // destinationName,destinationEmail,destinationZipcode,destinationAddress,destinationTel & paymentMethod
         // status,totalPrice,orderDate,deliveryTime
-        order.setStatus(1);
+        if (form.getPaymentMethod() == 1) {
+            order.setStatus(1);
+        } else if (form.getPaymentMethod() == 2) {
+            order.setStatus(2);
+        }
         order.setTotalPrice(order.getCalcTotalPrice());
         order.setOrderDate(new Date());
 
@@ -184,6 +192,7 @@ public class MyecsiteController {
     //////////////////////////////////////////////
     //// 注文履歴の表示
     //////////////////////////////////////////////
+
     /**
      * 注文履歴画面の表示
      *
